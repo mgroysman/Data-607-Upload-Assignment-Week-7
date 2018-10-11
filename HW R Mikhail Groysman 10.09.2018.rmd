@@ -1,0 +1,80 @@
+---
+title: "Data 607; Upload Assignment: Week 7 Assignment"
+author: "Mikhail Groysman"
+date: "October 9, 2018"
+output: html_document
+---
+
+We are required to load 3 files: HTML, XLS, and JSON.
+
+File #1 - HTML
+
+We will read an HTML file from github
+
+```{r}
+
+URL <- "https://raw.githubusercontent.com/mgroysman/Data-607-Upload-Assignment-Week-7/master/Books.html"
+
+destfile <- "C://Data/temp.html"
+
+download.file(URL, destfile)
+
+#install.packages("XML")
+
+library(XML)
+
+html_data<-readHTMLTable(destfile)
+
+html_data
+
+typeof(html_data)
+
+```
+
+File #2 - XML
+
+We will read a XML file from github
+
+```{r}
+URL <- "https://raw.githubusercontent.com/mgroysman/Data-607-Upload-Assignment-Week-7/master/Books.xml"
+
+destfile <- "C://Data/temp.xml"
+
+download.file(URL, destfile)
+
+#install.packages("plyr")
+
+library(plyr)
+
+xml_data<- ldply(xmlToList(destfile), data.frame)
+
+xml_data
+
+```
+
+File #3 - JSON
+
+We will read a Json file from github
+
+```{r}
+URL <- "https://raw.githubusercontent.com/mgroysman/Data-607-Upload-Assignment-Week-7/master/Books.json"
+
+destfile <- "C://Data/temp.json"
+
+download.file(URL, destfile)
+
+#install.packages("RJSONIO")
+
+library("RJSONIO")
+
+isValidJSON(destfile)
+
+json_data<- fromJSON(destfile,nullValue=NA,simplify=FALSE)
+
+json_data1<-do.call("rbind",lapply(json_data,data.frame,stringsAsFactors=FALSE))
+
+json_data1
+
+```
+
+All 3 dataframes captured the data. I personally prefer JSON dataframe. I do not have to deal with factors and it does not have additional attributes as XML one.
